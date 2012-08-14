@@ -55,7 +55,7 @@ example:  [ {cmd:'M', x:100, y:100 },
 (function(){
     var root = this;
 
-    root.Path = function (points){
+    var Path = function (points){
         //call the appropriate method to parse the provided points
         if (points instanceof Array) {
             this.parseArray(points);
@@ -67,6 +67,8 @@ example:  [ {cmd:'M', x:100, y:100 },
             throw "points must be provided as an array of points or an SVG path string";
         }
     }
+
+    root.Path = Path;
 
     //good enough for this coding challenge. Obviously not the ideal way of doing things,
     //see http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/

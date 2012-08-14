@@ -290,7 +290,6 @@ example:  [ {cmd:'M', x:100, y:100 },
             point = this[i];
             cmdUpperCase = point.cmd.toUpperCase();
 
-            //TODO account for other types of commands, like H, V, and z
             retArray.push(point.cmd);
 
             if (cmdUpperCase === 'L' || cmdUpperCase === 'M') {

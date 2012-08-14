@@ -1,49 +1,4 @@
 /*
-Path notes:
-
-relative points are relative to current point at the start of the command
-
-moveto (M or m):
-    -uppercase = absolute, lowercase = relative coords
-
-    -like lifting the pen and moving to a new location
-    
-    (NOT SUPPORTED PER INSTRUCTIONS)
-    -subsequent moveto commands represent start of a new subpath 
-
-    -if followed by multiple pairs of coordinates, they are treated as implicit LINETO commands
-        -relative if the moveto is relative, absolute if absolute
-
-    -if a RELATIVE moveto (m) appears as first element in the path, it is treated as ABSOLUTE
-        -subsequent pairs of coordiates are relative even though initial was absolute
-
-closepath (Z or z):
-    -z and Z are identical
-
-    -ends current subpath and draws straight line from current point to initial point of subpath
-    
-    (NOT SUPPORTED PER INSTRUCTIONS)
-    -if followed immediately by a moveto, then it is the start of a new subpath 
-
-lineto (L/l, H/h, or V/v):
-    -draw straight lines from current point to a new point
-    
-    L/l (x y)+
-        -draw a line from current point to given (x,y) coordinates, becomes new current point
-        -can accept multiple sets of coordinates
-        -new current point it set to final set of coordinates
-        
-        ex: L 100 100 200 100 400 300 = L 100 100 L 200 100 L 400 300
-
-    H/h (x)+
-        -draws a horizontal line from current point (cpx,cpy) to (x, cpy)
-        -can provide multiple values of x,  if desired (doesnt really make sense but whatever)
-
-    V/v (y)+
-        -draws a vertical line from current point (cpx, cpy) to (cpx, y)
-        -can provide multiple values of y, if desired (doesnt really make sense but whatever)
-
-
 Internally we will represent path as an array of point objects with an associated move command
 
 example:  [ {cmd:'M', x:100, y:100 }, 
@@ -55,7 +10,7 @@ example:  [ {cmd:'M', x:100, y:100 },
 (function(){
     var root = this;
 
-    root.Path = function (points){
+    var Path = function (points){
         //call the appropriate method to parse the provided points
         if (points instanceof Array) {
             this.parseArray(points);
@@ -67,6 +22,8 @@ example:  [ {cmd:'M', x:100, y:100 },
             throw "points must be provided as an array of points or an SVG path string";
         }
     }
+
+    root.Path = Path;
 
     //good enough for this coding challenge. Obviously not the ideal way of doing things,
     //see http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
@@ -333,7 +290,6 @@ example:  [ {cmd:'M', x:100, y:100 },
             point = this[i];
             cmdUpperCase = point.cmd.toUpperCase();
 
-            //TODO account for other types of commands, like H, V, and z
             retArray.push(point.cmd);
 
             if (cmdUpperCase === 'L' || cmdUpperCase === 'M') {
